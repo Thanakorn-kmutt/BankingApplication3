@@ -84,6 +84,18 @@ public class Bank {
     
     public void withdrawMoney(Account account, double amount) {
         account.deposit(amount);
+        Connection con = BankConnection.connect();
+        String sql = "UPDATE student set accBalance = ? where accID = ? ";
+        
+        try{
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setDouble(1, account.getBalance());
+            preparedStatement.setInt(2, account.getNumber());
+            preparedStatement.executeUpdate();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Account getAccount(int number){
